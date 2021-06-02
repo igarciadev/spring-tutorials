@@ -1,0 +1,248 @@
+# número de la versión de la especificación de OpenAPI - REQUERIDO
+openapi: 3.1.0
+
+# meta-datos sobre la API - REQUERIDO
+info:
+  title: IGARCIADEV - OpenAPI tutorial
+  description: API to illustrate OpenAPI specification
+  version: '1.0'
+  contact:
+    name: Isaac García
+    url: 'https://isaacgarciasanchez.es'
+
+servers:
+  - url: http://localhost:8081/api/v1/
+
+  # rutas y operaciones disponibles para la API - REQUERIDO
+paths:
+  /posts:
+    get:
+      operationId: getAllPosts
+      summary: Gets all posts
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+        503:
+          $ref: '#/components/responses/ServiceUnavailable'
+    post:
+      operationId: postMultiplePosts
+      summary: Saves multiple posts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Post'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+        503:
+          $ref: '#/components/responses/ServiceUnavailable'
+  /posts/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+    delete:
+      operationId: deleteOnePostById
+      summary: Deletes a post by ID
+      responses:
+        204:
+          description: No content
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+        503:
+          $ref: '#/components/responses/ServiceUnavailable'
+    get:
+      operationId: getOnePostById
+      summary: Gets a post by ID
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Post'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+        503:
+          $ref: '#/components/responses/ServiceUnavailable'
+    put:
+      operationId: putOnePostById
+      summary: Uploads an existing post by ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/Post'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Post'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+        503:
+          $ref: '#/components/responses/ServiceUnavailable'
+components:
+  schemas:
+    Post:
+      type: object
+      required:
+        - id
+        - title
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Idenfiticador numérico del registro en base de datos.
+          example: 1
+        title:
+          type: string
+          description: Título del mensaje.
+          example: Aprende, es gratis
+        publishedDate:
+          type: string
+          format: date
+          description: Fecha de publicación del mensaje.
+          example: "2020-10-30"
+        createdDate:
+          type: string
+          format: date-time
+          description: Fecha y hora en la que se creó el registro en base de datos.
+          example: "2020-11-14T08:30:41Z"
+        lastModifiedDate:
+          type: string
+          format: date-time
+          description: Fecha y hora en la que se ha actualizó por última vez el registro en base de datos.
+          example: "2020-12-05T13:25:12Z"
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        description:
+          type: string
+  responses:
+    # 204
+    NoContent:
+      description: No content
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    # 400
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    # 401
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    # 403
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    # 404
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    # 500
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    # 503
+    ServiceUnavailable:
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    id:
+      name: id
+      description: Numeric ID of the data base record
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+        minimum: 1

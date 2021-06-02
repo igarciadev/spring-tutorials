@@ -1,0 +1,1 @@
+INSERT INTO `post` (`id`, `title`, `publishedDate`) VALUES (1, 'Leyes de la física',  '2021-05-15'), (2, 'Aprende, es gratis', '2021-05-15');
